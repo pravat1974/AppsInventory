@@ -44,10 +44,9 @@ public class InventoryController {
 
 		
 
-		inventory.setCreatedTime(LocalDateTime.now());
-		inventory.setLastUpdatedTime(LocalDateTime.now());
 
-		return inventoryService.createUser(inventory);
+
+		return inventoryService.createInventory(inventory);
 
 	}
 
