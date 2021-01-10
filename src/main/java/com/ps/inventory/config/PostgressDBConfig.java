@@ -39,21 +39,6 @@ public class PostgressDBConfig extends AbstractR2dbcConfiguration {
 	@Value("${postgres.r2dbc.database}")
 	private String DBDATABASE;
 
-//	@Bean
-//	@Override
-//	public ConnectionFactory connectionFactory() {
-//
-//		return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
-//				.host(DBHOST)
-//				.port(DBPORT)
-//
-//				.username(USERNAME)
-//				.password(DBPASSWORD)
-//				.database(DBDATABASE)
-//				.build());
-//
-//	}
-	
 	
 	  @Bean 
 	  public ConnectionFactory connectionFactory() {
