@@ -5,61 +5,73 @@ import java.util.function.Function;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ps.inventory.dtos.InventoryDTO;
+import com.ps.inventory.exceptions.NoDataFoundException;
 import com.ps.inventory.model.Inventory;
+import com.ps.inventory.repo.ReactiveInventoryCrudRepository;
 import com.ps.inventory.repo.ReactiveInventoryRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
+
 public class InventoryServiceImpl implements InventoryService {
 
 	@Autowired
 	private ReactiveInventoryRepository inventoryRepository;
+	@Autowired
+	private ReactiveInventoryCrudRepository reactiveInventoryCrudRepository;
 
-	private InventoryDTO  convert(Inventory inventory){
-		InventoryDTO dto = new InventoryDTO();
-       BeanUtils.copyProperties(inventory, dto);
-       return dto;
+	@Override
+	public Mono<Inventory> createInventory(Mono<Inventory> inventory) {
+		Mono<Inventory> inventoryData = inventory.flatMap(data -> {
+			return reactiveInventoryCrudRepository.save(data);
+		});
+		return inventoryData;
 	}
 
 	@Override
-	public Mono<Inventory> createInventory(Inventory inventory) {
-		
-		return inventoryRepository.save(inventory);
+	public Mono<Inventory> deleteInventoryById(Integer id) {
+		return reactiveInventoryCrudRepository.findById(id)
+				.flatMap(inventory -> reactiveInventoryCrudRepository.delete(inventory).thenReturn(inventory));
+
 	}
 
 	@Override
-	public Mono<Inventory> updateInventory(Inventory inventory) {
-		
-		return inventoryRepository.update(inventory);
+	public Flux<Inventory> findAllInventory() {
+
+		return reactiveInventoryCrudRepository.findAll();
 	}
 
 	@Override
-	public Mono<Void> deleteUser(Integer id) {
-		return inventoryRepository.findById(id).flatMap(inventoryRepository::delete) ;
-	}
+	public Mono<Inventory> getInventoryById(Integer id) {
 
-	@Override
-	public Flux<Inventory> geAllInventory() {
-	
-		return inventoryRepository.findAll();
-	}
-
-	@Override
-	public Mono<Inventory> getInventory(Integer id) {
-	
-		return inventoryRepository.findById(id);
+		return reactiveInventoryCrudRepository.findById(id);
 	}
 
 	@Override
 	public Flux<Inventory> getInventoryByCriteria() {
-	
+
 		return null;
 	}
 
+	@Override
+	public Mono<Inventory> updateInventory(Mono<Inventory> inventory) {
+		return inventory.flatMap(data -> {
+
+			return reactiveInventoryCrudRepository.findById(data.getId()).flatMap(result -> {
+				if (result == null) {
+					return Mono
+							.error(new NoDataFoundException(HttpStatus.NOT_FOUND, "Inventory data is not available"));
+				}
+				return reactiveInventoryCrudRepository.findById(data.getId());
+			});
+
+		});
+
+	}
 }

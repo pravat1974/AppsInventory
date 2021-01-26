@@ -1,6 +1,7 @@
 package com.ps.inventory.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -8,38 +9,29 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 @Table(value="Product")
- @JsonIgnoreProperties(ignoreUnknown = true)
-@Data
-@Builder
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Product {
 	@Id
 	@Column("id")
 	private Integer id;
+	@Column("productName")
 	private String productName;
+	@Column("productNumber")
 	private String productNumber;
+	@Column("displayName")
 	private String displayName;
+	@Column("description")
 	private String description;
-	private LocalDate creationDate;
-	private LocalDate startDate;
-	private LocalDate endDate;
+	@Column("creationDate")
+	private LocalDateTime creationDate;
+	@Column("startDate")
+	private LocalDateTime startDate;
+	@Column("endDate")
+	private LocalDateTime endDate;
+	@Column("productType")
 	private String productType;
-	private Integer parentCategoryId;
-	
-	
-	
-	public Product() {
-		super();
-	}
 	public Integer getId() {
 		return id;
 	}
@@ -70,22 +62,22 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public LocalDate getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
-	public void setCreationDate(LocalDate creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 	public String getProductType() {
@@ -94,13 +86,7 @@ public class Product {
 	public void setProductType(String productType) {
 		this.productType = productType;
 	}
-	public Integer getParentCategoryId() {
-		return parentCategoryId;
-	}
-	public void setParentCategoryId(Integer parentCategoryId) {
-		this.parentCategoryId = parentCategoryId;
-	}
-	
+
 	
 }
 	

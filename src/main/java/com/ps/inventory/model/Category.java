@@ -1,40 +1,55 @@
 package com.ps.inventory.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 @Table(value="Category")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Data
-@Builder
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
-public class Category {
+public class Category implements Persistable<Integer> {
 	
+	@Id
+	@Column("id")
 	private Integer id;
-	private Integer catalogId;
-	private LocalDate creationDate;
-	private LocalDate  startDate;
-	private LocalDate  endDate;
+	@Column("productId")
+	private Integer productId;
+	@Column("creationDate")
+	private LocalDateTime creationDate;
+	@Column("startDate")
+	private LocalDateTime  startDate;
+	@Column("endDate")
+	private LocalDateTime  endDate;
+	@Column("displayName")
 	private String displayName;
+	@Column("description")
 	private String description;
-	private String parentCatId;
+	@Column("categoryType")
 	private String categoryType;
-	
-	
+	@Transient
+	private boolean newCategory;
 	
 	public Category() {
 		super();
+	}
+	public Category(Integer id, Integer productId, LocalDateTime creationDate, LocalDateTime startDate,
+			LocalDateTime endDate, String displayName, String description, String categoryType) {
+		super();
+		this.id = id;
+		this.productId = productId;
+		this.creationDate = creationDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.displayName = displayName;
+		this.description = description;
+		this.categoryType = categoryType;
 	}
 	public Integer getId() {
 		return id;
@@ -42,28 +57,28 @@ public class Category {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getCatalogId() {
-		return catalogId;
+	public Integer getProductId() {
+		return productId;
 	}
-	public void setCatalogId(Integer catalogId) {
-		this.catalogId = catalogId;
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
-	public LocalDate getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
-	public void setCreationDate(LocalDate creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 	public String getDisplayName() {
@@ -78,17 +93,17 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getParentCatId() {
-		return parentCatId;
-	}
-	public void setParentCatId(String parentCatId) {
-		this.parentCatId = parentCatId;
-	}
 	public String getCategoryType() {
 		return categoryType;
 	}
 	public void setCategoryType(String categoryType) {
 		this.categoryType = categoryType;
+	}
+	
+	
+	@Override
+	public boolean isNew() {
+		  return this.newCategory || id == null;
 	}
 	
 	
