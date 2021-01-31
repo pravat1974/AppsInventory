@@ -28,7 +28,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class InventoryHandler {
-	private static String SERVICE_NAME = "/api/inventory";
+	private static String SERVICE_NAME = "/api/inventory-service";
 	private static Mono<ServerResponse> notFound = ServerResponse.notFound().build();
 	@Autowired
 	// @Qualifier("serviceInventory")
@@ -42,13 +42,13 @@ public class InventoryHandler {
 				.build()
 				.and(route().GET(SERVICE_NAME + "/inventory/{id}", accept(APPLICATION_JSON), this::getInventoryById,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("getInventoryById")).build())
-				.and(route().POST(SERVICE_NAME + "/create", accept(APPLICATION_JSON), this::createInventory,
+				.and(route().POST(SERVICE_NAME + "/inventory/create", accept(APPLICATION_JSON), this::createInventory,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("createInventory")).build())
 
-				.and(route().PUT(SERVICE_NAME + "/update", accept(APPLICATION_JSON), this::updateInventory,
+				.and(route().PUT(SERVICE_NAME + "/inventory/update", accept(APPLICATION_JSON), this::updateInventory,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("updateInventory")).build())
 				.and(route()
-						.DELETE(SERVICE_NAME + "/delet/{id}", accept(APPLICATION_JSON), this::deleteInventoryById,
+						.DELETE(SERVICE_NAME + "/inventory/delete/{id}", accept(APPLICATION_JSON), this::deleteInventoryById,
 								ops -> ops.beanClass(InventoryService.class).beanMethod("deleteInventoryById"))
 						.build());
 	}
@@ -61,7 +61,7 @@ public class InventoryHandler {
 	}
 
 	public Mono<ServerResponse> getInventoryById(ServerRequest serverRequest) {
-		Integer id = new Integer(serverRequest.pathVariable("Id"));
+		Integer id = new Integer(serverRequest.pathVariable("id"));
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
 				.body(inventoryService.getInventoryById(id), Inventory.class).switchIfEmpty(notFound);
 

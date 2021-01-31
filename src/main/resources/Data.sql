@@ -16,4 +16,36 @@ CREATE TABLE APPUser
 )
 
 
+    CREATE TABLE Inventory
+(
     
+ id SERIAL PRIMARY KEY,
+	
+	inventoryName TEXT ,
+	
+creationDate time without time zone NOT NULL,
+	
+	 startDate time without time zone NOT NULL,
+	
+	 endDate   time without time zone NOT NULL,
+	
+ displayName TEXT ,
+	
+	 description TEXT  ,
+	
+	 catagoryId bigint,
+	
+ availStatus TEXT ,
+	
+ availabilityDate   time without time zone NOT NULL,
+	
+	 stockLevel bigint,
+	
+
+	
+  stockThresh bigint,
+	
+	 itemPriceId bigint
+	
+	
+)

@@ -16,6 +16,8 @@ public interface InventoryService {
 	public Mono<Inventory> getInventoryById(Integer id);
 	public Flux<Inventory> getInventoryByCriteria();
 	Mono<Inventory> createInventory(Mono<Inventory> inventory);
+	Flux<Object> populateInventoryWithPrice(Mono<Inventory> inventory);
+	
 
 }
 

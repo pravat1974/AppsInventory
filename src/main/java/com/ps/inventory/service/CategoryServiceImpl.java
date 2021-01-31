@@ -44,14 +44,14 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Flux<Category> findAllCategory() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return reactiveCategoryRepository.findAll();
 	}
 
 	@Override
-	public Mono<Category> findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Mono<Category> getCategoryById(Integer id) {
+		
+		return reactiveCategoryRepository.findById(id);
 	}
 
 	@Override

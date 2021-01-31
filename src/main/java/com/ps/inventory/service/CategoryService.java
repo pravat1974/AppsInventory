@@ -12,7 +12,7 @@ public interface CategoryService {
 	Mono<Category> updateCategory(Mono<Category> category);
 	Mono<Category>  deleteCategoryById(Integer id);
 	Flux<Category> findAllCategory();
-	Mono<Category> findById(Integer id);
+	Mono<Category> getCategoryById(Integer id);
 	Flux<Category> findByName(String name);
 
 }

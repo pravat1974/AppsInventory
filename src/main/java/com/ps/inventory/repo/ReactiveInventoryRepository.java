@@ -5,12 +5,16 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
-
+import org.springframework.data.relational.core.query.Update;
+import org.springframework.data.relational.core.query.Query;
+import org.springframework.data.relational.core.query.Update;
 import com.ps.inventory.model.Inventory;
+import static org.springframework.data.relational.core.query.Criteria.where;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@SuppressWarnings("unused")
 @Component
 public class ReactiveInventoryRepository {
 
@@ -25,6 +29,18 @@ public class ReactiveInventoryRepository {
 	public Mono<Inventory> update(Inventory entity) {
 
 		return r2dbcEntityTemplate.update(entity);
+	}
+	public Mono<Integer> updateInventory(Inventory inventory) {
+		
+		 return this.r2dbcEntityTemplate.update(
+	                Query.query(where("id").is(inventory.getId())),
+	                Update.update("itemPriceId", inventory.getItemPriceId()),
+	                     Inventory.class
+	        );
+	        	
+	        	
+	       
+
 	}
 
 	public Flux<Inventory> findAll() {

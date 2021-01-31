@@ -19,8 +19,8 @@ public class InventoryApplication {
 	}
 	@Bean
 	public GroupedOpenApi inventoryOpenApi() {
-		String[] paths = { "/api/inventory/**" };
-		return GroupedOpenApi.builder().group("inventory").pathsToMatch(paths)
+		String[] paths = { "/api/inventory-service/**" };
+		return GroupedOpenApi.builder().group("inventory-service").pathsToMatch(paths)
 				.build();
 	}
 }

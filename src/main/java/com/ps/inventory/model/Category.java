@@ -1,16 +1,13 @@
 package com.ps.inventory.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @Table(value="Category")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -67,12 +64,18 @@ public class Category implements Persistable<Integer> {
 		return creationDate;
 	}
 	public void setCreationDate(LocalDateTime creationDate) {
+		if(creationDate==null) {
+			this.creationDate =LocalDateTime.now();
+		}
 		this.creationDate = creationDate;
 	}
 	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 	public void setStartDate(LocalDateTime startDate) {
+		if(startDate==null) {
+			this.startDate = LocalDateTime.now();
+		}
 		this.startDate = startDate;
 	}
 	public LocalDateTime getEndDate() {
@@ -101,10 +104,15 @@ public class Category implements Persistable<Integer> {
 	}
 	
 	
-	@Override
+
+	
+	  @Override
+	   @Transient
 	public boolean isNew() {
-		  return this.newCategory || id == null;
+		  return this.newCategory|| id == null;
 	}
-	
-	
+	  public Category setAsNew(){
+	        this.newCategory = true;
+	        return this;
+	    }
 }
