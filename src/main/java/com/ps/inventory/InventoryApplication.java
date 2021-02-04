@@ -17,10 +17,16 @@ public class InventoryApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InventoryApplication.class, args);
 	}
+
 	@Bean
 	public GroupedOpenApi inventoryOpenApi() {
-		String[] paths = { "/api/inventory-service/**" };
-		return GroupedOpenApi.builder().group("inventory-service").pathsToMatch(paths)
-				.build();
+		String[] paths = { "/inventory-service/inventory/**" };
+		return GroupedOpenApi.builder().group("Inventory").pathsToMatch(paths).build();
 	}
+	@Bean
+	public GroupedOpenApi categoryOpenApi() {
+		String[] paths = { "/inventory-service/category/**" };
+		return GroupedOpenApi.builder().group("Category").pathsToMatch(paths).build();
+	}
+
 }

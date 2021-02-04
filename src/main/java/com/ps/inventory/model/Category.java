@@ -10,20 +10,22 @@ import org.springframework.data.relational.core.mapping.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Table(value="Category")
-@JsonIgnoreProperties(ignoreUnknown = true)
+
+@JsonIgnoreProperties({ "new" })
 public class Category implements Persistable<Integer> {
 	
 	@Id
 	@Column("id")
 	private Integer id;
-	@Column("productId")
-	private Integer productId;
+	
 	@Column("creationDate")
 	private LocalDateTime creationDate;
 	@Column("startDate")
 	private LocalDateTime  startDate;
 	@Column("endDate")
 	private LocalDateTime  endDate;
+	@Column("categoryName")
+	private String categoryName;
 	@Column("displayName")
 	private String displayName;
 	@Column("description")
@@ -36,30 +38,14 @@ public class Category implements Persistable<Integer> {
 	public Category() {
 		super();
 	}
-	public Category(Integer id, Integer productId, LocalDateTime creationDate, LocalDateTime startDate,
-			LocalDateTime endDate, String displayName, String description, String categoryType) {
-		super();
-		this.id = id;
-		this.productId = productId;
-		this.creationDate = creationDate;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.displayName = displayName;
-		this.description = description;
-		this.categoryType = categoryType;
-	}
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getProductId() {
-		return productId;
-	}
-	public void setProductId(Integer productId) {
-		this.productId = productId;
-	}
+	
 	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
@@ -103,10 +89,16 @@ public class Category implements Persistable<Integer> {
 		this.categoryType = categoryType;
 	}
 	
-	
 
-	
-	  @Override
+	  public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	@Override
 	   @Transient
 	public boolean isNew() {
 		  return this.newCategory|| id == null;
@@ -115,4 +107,13 @@ public class Category implements Persistable<Integer> {
 	        this.newCategory = true;
 	        return this;
 	    }
+
+	@Override
+	public String toString() {
+		return "Category {id=" + id + ", creationDate=" + creationDate + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", categoryName=" + categoryName + ", displayName=" + displayName + ", description="
+				+ description + ", categoryType=" + categoryType + ", newCategory=" + newCategory + "}";
+	}
+	  
+	  
 }

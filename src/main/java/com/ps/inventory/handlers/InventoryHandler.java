@@ -28,7 +28,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class InventoryHandler {
-	private static String SERVICE_NAME = "/api/inventory-service";
+	private static String SERVICE_NAME = "/inventory-service/inventory";
 	private static Mono<ServerResponse> notFound = ServerResponse.notFound().build();
 	@Autowired
 	// @Qualifier("serviceInventory")
@@ -37,18 +37,18 @@ public class InventoryHandler {
 	@Bean
 	public RouterFunction<ServerResponse> monoRouterInventoryFunction() {
 		return route()
-				.GET(SERVICE_NAME + "/inventories", accept(APPLICATION_JSON), this::findAllInventory,
+				.GET(SERVICE_NAME ,this::findAllInventory,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("findAllInventory"))
 				.build()
-				.and(route().GET(SERVICE_NAME + "/inventory/{id}", accept(APPLICATION_JSON), this::getInventoryById,
+				.and(route().GET(SERVICE_NAME + "/{id}", this::getInventoryById,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("getInventoryById")).build())
-				.and(route().POST(SERVICE_NAME + "/inventory/create", accept(APPLICATION_JSON), this::createInventory,
+				.and(route().POST(SERVICE_NAME + "/create", this::createInventory,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("createInventory")).build())
 
-				.and(route().PUT(SERVICE_NAME + "/inventory/update", accept(APPLICATION_JSON), this::updateInventory,
+				.and(route().PUT(SERVICE_NAME +"/update", this::updateInventory,
 						ops -> ops.beanClass(InventoryService.class).beanMethod("updateInventory")).build())
 				.and(route()
-						.DELETE(SERVICE_NAME + "/inventory/delete/{id}", accept(APPLICATION_JSON), this::deleteInventoryById,
+						.DELETE(SERVICE_NAME + "/{id}", this::deleteInventoryById,
 								ops -> ops.beanClass(InventoryService.class).beanMethod("deleteInventoryById"))
 						.build());
 	}
@@ -60,12 +60,6 @@ public class InventoryHandler {
 
 	}
 
-	public Mono<ServerResponse> getInventoryById(ServerRequest serverRequest) {
-		Integer id = new Integer(serverRequest.pathVariable("id"));
-		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-				.body(inventoryService.getInventoryById(id), Inventory.class).switchIfEmpty(notFound);
-
-	}
 
 	public Mono<ServerResponse> updateInventory(ServerRequest serverRequest) {
 		Mono<Inventory> inventory = serverRequest.bodyToMono(Inventory.class);
@@ -76,9 +70,17 @@ public class InventoryHandler {
 
 	public Mono<ServerResponse> deleteInventoryById(ServerRequest serverRequest) {
 
-		Integer id = new Integer(serverRequest.pathVariable("id"));
+		
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-				.body(inventoryService.deleteInventoryById(id), Inventory.class).switchIfEmpty(notFound);
+				.body(inventoryService.deleteInventoryById(serverRequest.pathVariable("id")), Inventory.class).switchIfEmpty(notFound);
+
+	}
+	
+
+	public Mono<ServerResponse> getInventoryById(ServerRequest serverRequest) {
+		
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+				.body(inventoryService.getInventoryById(serverRequest.pathVariable("id")), Inventory.class).switchIfEmpty(notFound);
 
 	}
 
